@@ -6,10 +6,10 @@ import SignUp from "./components/signIn&signUp/SignUp";
 function App() {
   return (
     <div>
-      {/* <SignIn/> */}
+      <SignIn/>
       <SignUp />
-      {/* <MainDash />
-      <Footer /> */}
+      <MainDash />
+      <Footer />
     </div>
   );
 }
