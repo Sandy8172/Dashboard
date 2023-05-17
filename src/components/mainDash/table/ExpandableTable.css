@@ -1,0 +1,52 @@
+.modalContent {
+    display: flex;
+    font-size: 10px;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgb(6, 29, 107);
+    padding: 16px;
+    border-radius: 4px;
+    width: 700px;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: white;
+    transform: translate(-50%, -50%);
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .textFieldStyle {
+    width: 35%;
+    color: white;
+    margin-bottom: 16px;
+  }
+  
+  .buttonStyle {
+    background-color: grey;
+    margin-right: 8px;
+    margin-top: 8px;
+  }
+  
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    font-size: 10px;
+  }
+  .popUp_heading{
+        position: absolute;
+        top: -32px;
+        left: 0;
+        color: black;
+        background-color: white;
+        padding: 0 1rem;
+        border-radius: 5px 5px 0 0;
+  }

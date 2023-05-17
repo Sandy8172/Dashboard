@@ -1,95 +1,75 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Checkbox from "@mui/material/Checkbox";
-import { Modal, Button, TextField } from "@mui/material";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { MenuItem } from "@mui/material";
-import { useState } from "react";
+import React, { useState,useCallback } from "react";
+import {
+  Table,
+  TableCell,
+  TableRow,
+  TableBody,
+  TableHead,
+  Box,
+  Collapse,
+  IconButton,
+  Checkbox,
+  Modal,
+  Button,
+  TextField,
+  MenuItem,
+} from "@mui/material";
+import {
+  KeyboardArrowUp as KeyboardArrowUpIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  ExpandMore as ExpandMoreIcon,
+} from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { dataSliceActions } from "../../../store/dataSlice";
+import "./ExpandableTable.css";
 
-function ExpandableTable(props) {
+const ExpandableTable = React.memo((props) => {
   const { row, rowData, headData } = props;
-  const [open, setOpen] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState("");
-  const [selectedRowData, setSelectedRowData] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedRowData, setSelectedRowData] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleSubmit = () => {
-    setOpenModal(false);
-  };
+  const selectedIndexes = useSelector((state) => state.indexValue);
+  const dispatch = useDispatch();
 
-  const handleInputChange = (e) => {
+  const handleCheckboxChange = useCallback((e) => {
+    const Idx_Num = row.Index_Num;
+    dispatch(dataSliceActions.toggleIndex(Idx_Num));
+
+    if (!selectedIndexes.includes(Idx_Num) && e.target.checked) {
+      e.target.checked = false;
+    }
+  }, [dispatch, row.Index_Num, selectedIndexes]);
+
+  const handleSubmit = useCallback(() => {
+    setOpenModal(false);
+  }, []);
+
+  const handleInputChange = useCallback((e) => {
     setInputValue(e.target.value);
-  };
-  const handleOptionClick = (value) => {
+  }, []);
+
+  const handleOptionClick = useCallback((value) => {
     setInputValue(value);
-  };
+  }, []);
 
-  const handleRowClick = (rowData) => {
-    setSelectedRowData(rowData);
-    setOpenModal(true);
-  };
+  const handleRowClick = useCallback(
+    (rowData) => {
+      setSelectedRowData(rowData);
+      setOpenModal(true);
+    },
+    []
+  );
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setOpenModal(false);
-  };
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-  const wrapper = {
-    display: "flex",
+  }, []);
 
-    alignItems: "center",
-    justifyContent: "flex-end",
-    gap: "10px",
-    fontSize: "10px",
-  };
-
-  const modalContentStyle = {
-    display: "flex",
-    fontSize: "10px",
-    alignItems: "center",
-    justifyContent: "space-evenly", // Center content vertically
-    backgroundColor: "blue",
-    padding: "16px",
-    borderRadius: "4px",
-    width: "700px",
-
-    margin: "0 auto",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    color: "white",
-    transform: "translate(-50%, -50%)",
-  };
-  const container = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  };
-
-  const textFieldStyle = {
-    width: "35%",
-    color: "white",
-    marginBottom: "16px",
-  };
-
-  const buttonStyle = {
-    backgroundColor: "grey",
-
-    marginRight: "8px",
-    marginTop: "8px",
-  };
+  const handleDropdownToggle = useCallback(() => {
+    setIsDropdownOpen((prevState) => !prevState);
+  }, []);
 
   return (
     <React.Fragment>
@@ -98,13 +78,17 @@ function ExpandableTable(props) {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen((prevState) => !prevState)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
         <TableCell>
-          <Checkbox color="success" />
+          <Checkbox
+            color="success"
+            onChange={handleCheckboxChange}
+            checked={selectedIndexes.includes(row.Index_Num)}
+          />
         </TableCell>
         <TableCell component="th" scope="row" align="center">
           {row.Index_Num}
@@ -122,21 +106,17 @@ function ExpandableTable(props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    {headData.map((ele, ind) => {
-                      return (
-                        <TableCell key={ind} align="center">
-                          {ele}
-                        </TableCell>
-                      );
-                    })}
+                    {headData.map((ele, ind) => (
+                      <TableCell key={ind} align="center">
+                        {ele}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {rowData.map((ele, ind) => {
                     const meetsCondition = ele.Index_Num === row.Index_Num;
-
                     const hasNonEmptyCells = headData.some((item) => ele[item]);
-
                     if (meetsCondition && hasNonEmptyCells) {
                       return (
                         <TableRow
@@ -172,28 +152,20 @@ function ExpandableTable(props) {
           onClose={handleCloseModal}
           aria-labelledby="custom-modal-title"
         >
-          <div style={modalContentStyle}>
-            <div style={container}>
-              <h2
-                style={{
-                  position: "absolute",
-                  top: -30,
-                  left: 4,
-                  color: "black",
-                }}
-              >
-                Derivates Buy Order
-              </h2>
+          <div className="modalContent">
+            <div className="container">
+              <h2 className="popUp_heading">Derivates Buy Order</h2>
               <h2>Ticker: {selectedRowData?.Ticker}</h2>
               <h2>Option Type: {selectedRowData?.Option_Type}</h2>
             </div>
 
-            <div style={wrapper}>
+            <div className="wrapper">
               <TextField
                 label="QTY"
                 value={inputValue}
                 onChange={handleInputChange}
-                style={{ height: "40px", ...textFieldStyle }}
+                style={{ height: "40px" }}
+                className="textFieldStyle"
                 InputProps={{
                   style: {
                     borderColor: "white",
@@ -229,7 +201,7 @@ function ExpandableTable(props) {
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
-                style={buttonStyle}
+                className="buttonStyle"
               >
                 Submit
               </Button>
@@ -239,6 +211,6 @@ function ExpandableTable(props) {
       )}
     </React.Fragment>
   );
-}
+});
 
 export default ExpandableTable;
