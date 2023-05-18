@@ -103,7 +103,7 @@ const ExpandableTable = React.memo((props) => {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Table size="small" aria-label="purchases">
+              <Table size="small" sx={{width:"100%",ml:"9%"}} aria-label="purchases" >
                 <TableHead>
                   <TableRow>
                     {headData.map((ele, ind) => (
@@ -113,7 +113,7 @@ const ExpandableTable = React.memo((props) => {
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody>   
                   {rowData.map((ele, ind) => {
                     const meetsCondition = ele.Index_Num === row.Index_Num;
                     const hasNonEmptyCells = headData.some((item) => ele[item]);
@@ -124,6 +124,7 @@ const ExpandableTable = React.memo((props) => {
                           onClick={() => handleRowClick(ele)}
                           style={{ cursor: "pointer" }}
                         >
+                    
                           {headData.map((item, ind) => (
                             <TableCell
                               component="th"

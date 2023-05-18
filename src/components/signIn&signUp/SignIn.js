@@ -33,7 +33,7 @@ const SignIn = () => {
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
         postData
       )
-      .then(() => navigate("/dashboard", { replace: true }))
+      .then(() => navigate("/home", { replace: true }))
       .catch((err) => alert(err.response.data.error.message));
   };
 

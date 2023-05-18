@@ -47,7 +47,7 @@ export default function CollapsibleTable(props) {
         aria-label="collapsible table"
       >
         <TableHead>
-          <TableRow>
+          <TableRow >
             <TableCell />
             <TableCell />
             <TableCell align="center">Index_Num</TableCell>

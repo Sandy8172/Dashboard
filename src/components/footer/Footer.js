@@ -81,7 +81,7 @@ const Footer = () => {
   return (
     <form onSubmit={formSubmitHandler} className="footer_wrapper">
       <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel>Select</InputLabel>
+        <InputLabel >Select</InputLabel>
         <Select value={select} onChange={handleSelectChange}>
           <MenuItem>
             <em>None</em>
