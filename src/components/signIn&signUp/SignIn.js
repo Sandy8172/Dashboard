@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Avatar,
   Button,
   CssBaseline,
   TextField,
-  Link,
   Grid,
   Box,
   Typography,
@@ -13,7 +12,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -90,7 +89,10 @@ const SignIn = () => {
               Sign In
             </Button>
             <Grid item>
-              <Link href="/signup" variant="body2">
+              <Link
+                style={{fontSize:"14px" }}
+                to={"/signup"}
+              >
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

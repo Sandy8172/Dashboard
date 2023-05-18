@@ -4,7 +4,6 @@ import {
   Button,
   CssBaseline,
   TextField,
-  Link,
   Grid,
   Box,
   Typography,
@@ -13,7 +12,7 @@ import {
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -52,7 +51,7 @@ const SignUp = () => {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 20,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -129,7 +128,7 @@ const SignUp = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link style={{fontSize:"14px" }} to={"/"} >
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -142,7 +141,7 @@ const SignUp = () => {
           align="center"
           sx={{ mt: 5 }}
         >
-          {"© "}
+         {"Copyright © "}
           Pace {new Date().getFullYear()}
           {"."}
         </Typography>
