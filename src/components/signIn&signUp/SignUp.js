@@ -1,45 +1,49 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import React, { useState } from "react";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Typography color="inherit" style={{ display: "inline" }}>
-        Pace
-      </Typography>{' '}{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const API_KEY = "AIzaSyCf0Z2VjUZDXtELLJVyvpjciwdKWxA4nxc";
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    if (!firstName || !lastName || !email || !password) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+    const postData = {
+      email,
+      password,
+      returnSecureToken: true,
+    };
+    axios
+      .post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+        postData
+      )
+      .then(() => navigate("/", { replace: true }))
+      .catch((err) => alert(err.response.data.error.message));
   };
 
   return (
@@ -71,42 +75,47 @@ const SignUp = () => {
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
-                  required
                   fullWidth
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
                   fullWidth
                   id="lastName"
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
+                  type="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
                   name="password"
                   label="Password"
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -120,14 +129,23 @@ const SignUp = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ mt: 5 }}
+        >
+          {"© "}
+          Pace {new Date().getFullYear()}
+          {"."}
+        </Typography>
       </Container>
     </ThemeProvider>
   );

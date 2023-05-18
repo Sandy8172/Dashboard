@@ -1,32 +1,41 @@
-import React from 'react';
-import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Typography color="inherit" style={{ display: "inline" }}>
-        Pace
-      </Typography>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
+import React, { useEffect } from "react";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
- const SignIn=()=> {
+const SignIn = () => {
+  const navigate = useNavigate();
+  const API_KEY = "AIzaSyCf0Z2VjUZDXtELLJVyvpjciwdKWxA4nxc";
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const postData = {
+      email: data.get("email"),
+      password: data.get("password"),
+      returnSecureToken: true,
+    };
+    axios
+      .post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
+        postData
+      )
+      .then(() => navigate("/dashboard", { replace: true }))
+      .catch((err) => alert(err.response.data.error.message));
   };
 
   return (
@@ -35,27 +44,32 @@ const defaultTheme = createTheme();
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            marginTop: 20,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
               label="Email Address"
               name="email"
               autoComplete="email"
+              type="email"
               autoFocus
             />
             <TextField
@@ -65,12 +79,7 @@ const defaultTheme = createTheme();
               name="password"
               label="Password"
               type="password"
-              id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"
@@ -80,24 +89,26 @@ const defaultTheme = createTheme();
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+            <Grid item>
+              <Link href="/signup" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ mt: 8 }}
+        >
+          {"Copyright © "}
+          Pace {new Date().getFullYear()}
+          {"."}
+        </Typography>
       </Container>
     </ThemeProvider>
   );
-}
+};
 
 export default SignIn;
