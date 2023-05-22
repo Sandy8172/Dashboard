@@ -41,21 +41,21 @@ export default function CollapsibleTable(props) {
   }, [createData, row]);
 
   return (
-    <TableContainer component={Paper} sx={{ width: "100%", height: "70vh" }}>
+    <TableContainer component={Paper} sx={{ color:"white",  backgroundColor: "#141e2f",width: "100%", height: "60vh",mt:"5rem" }}>
       <Table
-        sx={{ width: "100%", height: "max-content" }}
+        sx={{color:"white", width: "100%", height: "max-content" }}
         aria-label="collapsible table"
       >
         <TableHead>
-          <TableRow >
+          <TableRow sx={{color:"white",borderBottom:"2px solid #7b7b7b"}}>
             <TableCell />
             <TableCell />
-            <TableCell align="center">Index_Num</TableCell>
-            <TableCell align="center">Strategy_Name</TableCell>
-            <TableCell align="center">PnL</TableCell>
-            <TableCell align="center">Net_Qty</TableCell>
-            <TableCell align="center">Sell_Qty</TableCell>
-            <TableCell align="center">Buy_Qty</TableCell>
+            <TableCell  sx={{color:"white"}} align="center">Index_Num</TableCell>
+            <TableCell  sx={{color:"white"}} align="center">Strategy_Name</TableCell>
+            <TableCell  sx={{color:"white"}} align="center">PnL</TableCell>
+            <TableCell  sx={{color:"white"}} align="center">Net_Qty</TableCell>
+            <TableCell  sx={{color:"white"}} align="center">Sell_Qty</TableCell>
+            <TableCell  sx={{color:"white"}} align="center">Buy_Qty</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

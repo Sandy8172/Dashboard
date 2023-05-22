@@ -12,6 +12,7 @@ import {
   Modal,
   Button,
   TextField,
+  TableContainer,
   MenuItem,
 } from "@mui/material";
 import {
@@ -73,11 +74,13 @@ const ExpandableTable = React.memo((props) => {
 
   return (
     <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+     
+      <TableRow sx={{borderBottom:"2px solid #7b7b7b"}}>
         <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
+            sx={{color:"white"}}
             onClick={() => setOpen((prevState) => !prevState)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -88,16 +91,17 @@ const ExpandableTable = React.memo((props) => {
             color="success"
             onChange={handleCheckboxChange}
             checked={selectedIndexes.includes(row.Index_Num)}
+            sx={{color:"white"}}
           />
         </TableCell>
-        <TableCell component="th" scope="row" align="center">
+        <TableCell  sx={{color:"white"}} component="th" scope="row" align="center">
           {row.Index_Num}
         </TableCell>
-        <TableCell align="center">{row.Strategy_Name}</TableCell>
-        <TableCell align="center">{row.MtM}</TableCell>
-        <TableCell align="center">{row.Net_Qty}</TableCell>
-        <TableCell align="center">{row.Sell_Qty}</TableCell>
-        <TableCell align="center">{row.Buy_Qty}</TableCell>
+        <TableCell  sx={{color:"white"}} align="center">{row.Strategy_Name}</TableCell>
+        <TableCell  sx={{color:"white"}} align="center">{row.MtM}</TableCell>
+        <TableCell  sx={{color:"white"}} align="center">{row.Net_Qty}</TableCell>
+        <TableCell  sx={{color:"white"}} align="center">{row.Sell_Qty}</TableCell>
+        <TableCell  sx={{color:"white"}} align="center">{row.Buy_Qty}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -105,9 +109,9 @@ const ExpandableTable = React.memo((props) => {
             <Box sx={{ margin: 1 }}>
               <Table size="small" sx={{width:"100%",ml:"9%"}} aria-label="purchases" >
                 <TableHead>
-                  <TableRow>
+                  <TableRow sx={{borderBottom:"2px solid #7b7b7b"}}>
                     {headData.map((ele, ind) => (
-                      <TableCell key={ind} align="center">
+                      <TableCell  sx={{color:"white"}} key={ind} align="center">
                         {ele}
                       </TableCell>
                     ))}
@@ -120,6 +124,7 @@ const ExpandableTable = React.memo((props) => {
                     if (meetsCondition && hasNonEmptyCells) {
                       return (
                         <TableRow
+                        sx={{color:"white",borderBottom:"2px solid #7b7b7b"}}
                           key={ind}
                           onClick={() => handleRowClick(ele)}
                           style={{ cursor: "pointer" }}
@@ -127,6 +132,7 @@ const ExpandableTable = React.memo((props) => {
                     
                           {headData.map((item, ind) => (
                             <TableCell
+                            sx={{color:"white"}}
                               component="th"
                               scope="row"
                               key={ind}

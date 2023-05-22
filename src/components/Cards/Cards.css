@@ -1,0 +1,42 @@
+.Cards {
+    display: flex;
+    margin-top:-4rem;
+  
+   align-items: center;
+   justify-content:space-around;
+    gap:0px!important;
+    background-color: #141e2f;
+    height:15rem;
+    border-radius:10px 10px 10px 10px;
+    
+  
+  }
+  .parentContainer{
+    
+   width:30%;
+   display:flex;
+   align-items: center;
+   justify-content: space-around;
+    gap:0;
+    gap:10px;
+     display:flex;
+     flex-direction:column;
+     margin: auto;
+     margin-top: 4rem;
+  }
+  
+  @media screen and (max-width: 1200px) {
+    .Cards{
+      flex-direction: column;
+    }
+    .parentContainer{
+      height: 9rem;
+    }
+  }
+  
+  @media screen and (max-width: 768px)
+  {
+    .Cards{
+      width: 90%;
+    }
+  }

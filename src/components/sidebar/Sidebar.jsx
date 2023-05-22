@@ -1,5 +1,8 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
+import "./Sidebar.css"
+import Cards from "../Cards/Cards";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,6 +14,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import CloseIcon from '@mui/icons-material/Close';
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -25,6 +29,7 @@ import TradeBook from "../tradeBook/TradeBook";
 import OrderBook from "../orderBook/OrderBook";
 import MainDash from "../mainDash/MainDash";
 import Footer from "../footer/Footer";
+
 
 const drawerWidth = 240;
 
@@ -76,6 +81,7 @@ export default function Sidebar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [optionValue, setOptionValue] = React.useState("Dashboard");
+  const [selected,setSelected] = useState(0);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -84,15 +90,16 @@ export default function Sidebar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const optionValueHandler = (event) => {
-    setOptionValue(event.target.textContent);
-  };
+ const selectedValueHandler = (value) =>{
+  setOptionValue(value);
+ }
+ 
+ 
 
   return (
-    <Box sx={{ display: "flex"}}>
+    <Box sx={{ display: "flex", backgroundColor:"#010819"}}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar sx={{backgroundColor:"#010819"}} position="fixed" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -115,6 +122,8 @@ export default function Sidebar() {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            background:"#0a0f18",
+            color:"white"
           },
         }}
         variant="persistent"
@@ -124,7 +133,7 @@ export default function Sidebar() {
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
+              <CloseIcon sx={{color:"white"}}/>
             ) : (
               <ChevronRightIcon />
             )}
@@ -141,11 +150,13 @@ export default function Sidebar() {
             <ListItem
               key={index}
               disablePadding
-              sx={{ mt: 5 }}
-              onClick={optionValueHandler}
+              sx={{ mt: 5, }}
+              onClick={()=>{setSelected(index)
+                selectedValueHandler(ele.name);
+              }}
             >
-              <ListItemButton>
-                <ListItemIcon>{ele.icon}</ListItemIcon>
+              <ListItemButton  className={`menuItem ${selected === index ? "active" : ""}`}>
+                <ListItemIcon sx={{color:"white"}}>{ele.icon}</ListItemIcon>
                 <ListItemText primary={ele.name} />
               </ListItemButton>
             </ListItem>
@@ -157,7 +168,13 @@ export default function Sidebar() {
         <DrawerHeader />
         {optionValue === "Dashboard" && (
           <>
-            <MainDash /> <Footer />
+          {/* <div style={{ display:"flex",flexDirection:"column"}}> */}
+            <Cards/>
+          <MainDash />
+
+          {/* </div> */}
+          
+            <Footer />
           </>
         )}
         {optionValue === "Order Book" && <OrderBook />}
