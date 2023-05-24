@@ -1,8 +1,7 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import "./Sidebar.css"
 import Cards from "../Cards/Cards";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,7 +12,6 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import CloseIcon from '@mui/icons-material/Close';
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -29,6 +27,7 @@ import TradeBook from "../tradeBook/TradeBook";
 import OrderBook from "../orderBook/OrderBook";
 import MainDash from "../mainDash/MainDash";
 import Footer from "../footer/Footer";
+import "./Sidebar.css"
 
 
 const drawerWidth = 240;
@@ -93,6 +92,23 @@ export default function Sidebar() {
  const selectedValueHandler = (value) =>{
   setOptionValue(value);
  }
+
+ useEffect(() => {
+  const handleKeyDown = (event) => {
+    if ( event.key === 'F3') {
+      setOptionValue("Order Book")
+    }else if(event.key === 'F8'){
+      setOptionValue("Trade Book")
+    }
+  };
+
+  document.addEventListener('keydown', handleKeyDown);
+
+  return () => {
+    document.removeEventListener('keydown', handleKeyDown);
+  };
+}, []);
+
  
  
 
@@ -111,7 +127,7 @@ export default function Sidebar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Dashboard
+            {optionValue}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -162,20 +178,11 @@ export default function Sidebar() {
             </ListItem>
           ))}
         </List>
-        {/* <Divider /> */}
       </Drawer>
       <Main open={open} sx={{width:"100%",}}>
         <DrawerHeader />
         {optionValue === "Dashboard" && (
-          <>
-          {/* <div style={{ display:"flex",flexDirection:"column"}}> */}
-            <Cards/>
           <MainDash />
-
-          {/* </div> */}
-          
-            <Footer />
-          </>
         )}
         {optionValue === "Order Book" && <OrderBook />}
         {optionValue === "Trade Book" && <TradeBook />}

@@ -1,4 +1,5 @@
-import React, { useState,useCallback } from "react";
+import { CSVLink } from "react-csv";
+import React, { useState, useCallback } from "react";
 import {
   Table,
   TableCell,
@@ -12,7 +13,6 @@ import {
   Modal,
   Button,
   TextField,
-  TableContainer,
   MenuItem,
 } from "@mui/material";
 import {
@@ -21,28 +21,35 @@ import {
   ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { dataSliceActions } from "../../../store/dataSlice";
+import { footerSliceActions } from "../../../store/footerSlice";
 import "./ExpandableTable.css";
+// import { CSVLink } from "react-csv";
+import GetAppIcon from "@mui/icons-material/GetApp";
 
 const ExpandableTable = React.memo((props) => {
-  const { row, rowData, headData } = props;
+  const { row } = props;
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const selectedIndexes = useSelector((state) => state.indexValue);
+  const selectedIndexes = useSelector((state) => state.footer.indexValue);
   const dispatch = useDispatch();
+  const rowData = useSelector((state) => state.data.rows);
+  const headData = useSelector((state) => state.data.headers);
 
-  const handleCheckboxChange = useCallback((e) => {
-    const Idx_Num = row.Index_Num;
-    dispatch(dataSliceActions.toggleIndex(Idx_Num));
+  const handleCheckboxChange = useCallback(
+    (e) => {
+      const Idx_Num = row.Index_Num;
+      dispatch(footerSliceActions.toggleIndex(Idx_Num));
 
-    if (!selectedIndexes.includes(Idx_Num) && e.target.checked) {
-      e.target.checked = false;
-    }
-  }, [dispatch, row.Index_Num, selectedIndexes]);
+      if (!selectedIndexes.includes(Idx_Num) && e.target.checked) {
+        e.target.checked = false;
+      }
+    },
+    [dispatch, row.Index_Num, selectedIndexes]
+  );
 
   const handleSubmit = useCallback(() => {
     setOpenModal(false);
@@ -56,13 +63,10 @@ const ExpandableTable = React.memo((props) => {
     setInputValue(value);
   }, []);
 
-  const handleRowClick = useCallback(
-    (rowData) => {
-      setSelectedRowData(rowData);
-      setOpenModal(true);
-    },
-    []
-  );
+  const handleRowClick = useCallback((rowData) => {
+    setSelectedRowData(rowData);
+    setOpenModal(true);
+  }, []);
 
   const handleCloseModal = useCallback(() => {
     setOpenModal(false);
@@ -72,15 +76,27 @@ const ExpandableTable = React.memo((props) => {
     setIsDropdownOpen((prevState) => !prevState);
   }, []);
 
+  // const csvData = [selectedRowData];
+  const csvHeaders = headData.map((header) => ({ label: header, key: header }));
+  const csvData = rowData.map((row) => ({
+    ...row,
+    MtM: parseFloat(row.MtM), // Convert MtM value to a number if needed
+  }));
+
+  const csvReport = {
+    filename: "table_data.csv",
+    headers: csvHeaders,
+    data: csvData,
+  };
+
   return (
     <React.Fragment>
-     
-      <TableRow sx={{borderBottom:"2px solid #7b7b7b"}}>
+      <TableRow sx={{ borderBottom: "2px solid #7b7b7b" }}>
         <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
-            sx={{color:"white"}}
+            sx={{ color: "white" }}
             onClick={() => setOpen((prevState) => !prevState)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -91,48 +107,73 @@ const ExpandableTable = React.memo((props) => {
             color="success"
             onChange={handleCheckboxChange}
             checked={selectedIndexes.includes(row.Index_Num)}
-            sx={{color:"white"}}
+            sx={{ color: "white" }}
           />
         </TableCell>
-        <TableCell  sx={{color:"white"}} component="th" scope="row" align="center">
+        <TableCell
+          sx={{ color: "white" }}
+          component="th"
+          scope="row"
+          align="center"
+        >
           {row.Index_Num}
         </TableCell>
-        <TableCell  sx={{color:"white"}} align="center">{row.Strategy_Name}</TableCell>
-        <TableCell  sx={{color:"white"}} align="center">{row.MtM}</TableCell>
-        <TableCell  sx={{color:"white"}} align="center">{row.Net_Qty}</TableCell>
-        <TableCell  sx={{color:"white"}} align="center">{row.Sell_Qty}</TableCell>
-        <TableCell  sx={{color:"white"}} align="center">{row.Buy_Qty}</TableCell>
+        <TableCell sx={{ color: "white" }} align="center">
+          {row.Strategy_Name}
+        </TableCell>
+        <TableCell sx={{ color: "white" }} align="center">
+          {row.MtM}
+        </TableCell>
+        <TableCell sx={{ color: "white" }} align="center">
+          {row.Net_Qty}
+        </TableCell>
+        <TableCell sx={{ color: "white" }} align="center">
+          {row.Sell_Qty}
+        </TableCell>
+        <TableCell sx={{ color: "white" }} align="center">
+          {row.Buy_Qty}
+        </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Table size="small" sx={{width:"100%",ml:"9%"}} aria-label="purchases" >
+              <Table
+                size="small"
+                sx={{ width: "100%", ml: "1%", border: "2px #7b7b7b solid" }}
+                aria-label="purchases"
+              >
                 <TableHead>
-                  <TableRow sx={{borderBottom:"2px solid #7b7b7b"}}>
+                  <TableRow sx={{ borderBottom: "2px #7b7b7b solid" }}>
                     {headData.map((ele, ind) => (
-                      <TableCell  sx={{color:"white"}} key={ind} align="center">
+                      <TableCell
+                        sx={{ color: "white" }}
+                        key={ind}
+                        align="center"
+                      >
                         {ele}
                       </TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody>   
+                <TableBody>
                   {rowData.map((ele, ind) => {
                     const meetsCondition = ele.Index_Num === row.Index_Num;
                     const hasNonEmptyCells = headData.some((item) => ele[item]);
                     if (meetsCondition && hasNonEmptyCells) {
                       return (
                         <TableRow
-                        sx={{color:"white",borderBottom:"2px solid #7b7b7b"}}
+                          sx={{
+                            color: "white",
+                            borderBottom: "2px solid #7b7b7b",
+                          }}
                           key={ind}
                           onClick={() => handleRowClick(ele)}
                           style={{ cursor: "pointer" }}
                         >
-                    
                           {headData.map((item, ind) => (
                             <TableCell
-                            sx={{color:"white"}}
+                              sx={{ color: "white" }}
                               component="th"
                               scope="row"
                               key={ind}
@@ -215,6 +256,27 @@ const ExpandableTable = React.memo((props) => {
             </div>
           </div>
         </Modal>
+      )}
+
+      {open && (
+        <TableRow>
+          <TableCell colSpan={8} align="right">
+            <CSVLink
+              data={csvData}
+              filename={"selected_row_data.csv"}
+              target="_blank"
+              className="export-button"
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<GetAppIcon />}
+              >
+                Export Data
+              </Button>
+            </CSVLink>
+          </TableCell>
+        </TableRow>
       )}
     </React.Fragment>
   );

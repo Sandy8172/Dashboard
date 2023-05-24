@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import "./Footer.css";
 import { useSelector, useDispatch } from "react-redux";
-import { dataSliceActions } from "../../store/dataSlice";
+import { footerSliceActions } from "../../store/footerSlice";
 import axios from "axios";
 
 const Footer = () => {
@@ -25,37 +25,37 @@ const Footer = () => {
     isDisabled,
     isChecked,
   } = useSelector((state) => ({
-    indexValue: state.indexValue,
-    select: state.selected.select,
-    symbol: state.selected.symbol,
-    Qty: state.selected.Qty,
-    order: state.selected.order,
-    option: state.selected.option,
-    isDisabled: state.isDisabled,
-    isChecked: state.isChecked,
+    indexValue: state.footer.indexValue,
+    select: state.footer.selected.select,
+    symbol: state.footer.selected.symbol,
+    Qty: state.footer.selected.Qty,
+    order: state.footer.selected.order,
+    option: state.footer.selected.option,
+    isDisabled: state.footer.isDisabled,
+    isChecked: state.footer.isChecked,
   }));
 
   const handleSelectChange = (event) => {
     const value = event.target.value;
-    dispatch(dataSliceActions.selectedValueHandler(value));
+    dispatch(footerSliceActions.selectedValueHandler(value));
   };
   const handleSymbolChange = (event) => {
     const value = event.target.value;
-    dispatch(dataSliceActions.symbolValueHandler(value));
+    dispatch(footerSliceActions.symbolValueHandler(value));
   };
 
   const handleQtyChange = (event) => {
     const value = event.target.value;
-    dispatch(dataSliceActions.QtyValueHandler(value));
+    dispatch(footerSliceActions.QtyValueHandler(value));
   };
 
   const handleOrderChange = (event) => {
     const value = event.target.value;
-    dispatch(dataSliceActions.orderValueHandler(value));
+    dispatch(footerSliceActions.orderValueHandler(value));
   };
   const handleOptionChange = (event) => {
     const value = event.target.value;
-    dispatch(dataSliceActions.optionValueHandler(value));
+    dispatch(footerSliceActions.optionValueHandler(value));
   };
 
   const formSubmitHandler = (e) => {
@@ -72,7 +72,7 @@ const Footer = () => {
       .post("http://172.16.1.24:5000/response", selectedData)
       .then((ress) => {
         console.log(ress);
-        dispatch(dataSliceActions.resetForm());
+        dispatch(footerSliceActions.resetForm());
       })
       .catch((err) => console.log(err));
     console.log(selectedData);
@@ -80,37 +80,51 @@ const Footer = () => {
 
   return (
     <form onSubmit={formSubmitHandler} className="footer_wrapper">
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel >Select</InputLabel>
-        <Select value={select} onChange={handleSelectChange}>
-          <MenuItem>
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-filled-label">Select</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={select}
+          onChange={handleSelectChange}
+        >
+          <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={"STRATEGY"}>STRATEGY</MenuItem>
+          <MenuItem value={"STRATEGY"}>Strategy</MenuItem>
           <MenuItem value={"INSTRUMENT"} disabled={isChecked}>
-            INSTRUMENT
+            Instrument
           </MenuItem>
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel>Symbol Type</InputLabel>
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 130 }}>
+        <InputLabel id="demo-simple-select-filled-label">
+          Symbol Type
+        </InputLabel>
         <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
           value={symbol}
           onChange={handleSymbolChange}
           disabled={isDisabled}
         >
-          <MenuItem>
+          <MenuItem value="">
             <em>None</em>
           </MenuItem>
           <MenuItem value={"NIFTY"}>Nifty</MenuItem>
           <MenuItem value={"BANK NIFTY"}>Bank Nifty</MenuItem>
-          <MenuItem value={"NIFTY, BANK NIFTY"}>BOTH</MenuItem>
+          <MenuItem value={"NIFTY, BANK NIFTY"}>Both</MenuItem>
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel>Qty(%)</InputLabel>
-        <Select value={Qty} onChange={handleQtyChange}>
-          <MenuItem>
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 130 }}>
+        <InputLabel id="demo-simple-select-filled-label">Qty%</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={Qty}
+          onChange={handleQtyChange}
+        >
+          <MenuItem value="">
             <em>None</em>
           </MenuItem>
           <MenuItem value={25}>25%</MenuItem>
@@ -118,20 +132,33 @@ const Footer = () => {
           <MenuItem value={75}>75%</MenuItem>
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel>Order</InputLabel>
-        <Select value={order} onChange={handleOrderChange}>
-          <MenuItem>
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 130 }}>
+        <InputLabel id="demo-simple-select-filled-label">Order Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={order}
+          onChange={handleOrderChange}
+        >
+          <MenuItem value="">
             <em>None</em>
           </MenuItem>
           <MenuItem value={"BUY"}>BUY</MenuItem>
           <MenuItem value={"SELL"}>SELL</MenuItem>
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel>Option Type</InputLabel>
-        <Select value={option} onChange={handleOptionChange}>
-          <MenuItem>
+
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 130 }}>
+        <InputLabel id="demo-simple-select-filled-label">
+          Option Type
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={option}
+          onChange={handleOptionChange}
+        >
+          <MenuItem value="">
             <em>None</em>
           </MenuItem>
           <MenuItem value={"CE"}>CE</MenuItem>

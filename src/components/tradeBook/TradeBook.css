@@ -1,0 +1,14 @@
+.data-grid-container .MuiDataGrid-footerContainer {
+    display: none;
+  
+  }
+  .tradeBook_wrapper{
+      height: 80vh;
+      width: 100%;
+      background-color: #141e2f;
+      color: #fff;
+      border-radius: 1rem;
+  }
+  .tradeBook_text{
+      padding: 1rem 0 0 1rem;
+  }

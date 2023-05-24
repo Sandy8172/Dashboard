@@ -13,8 +13,8 @@ function App() {
         path="/home"
         element={
           <>
-            <Sidebar />
-          </>
+            <Sidebar/>
+            </>
         }
       />
     </Routes>

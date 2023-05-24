@@ -38,8 +38,9 @@ const SignIn = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme} >
-      <Container component="main" maxWidth="xs">
+    <div style={{background:"#010819"}}>
+    <ThemeProvider theme={defaultTheme}   >
+      <Container component="main" maxWidth="xs" >
         <CssBaseline />
         <Box
           sx={{
@@ -52,7 +53,7 @@ const SignIn = () => {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{color:"white"}}>
             Sign in
           </Typography>
           <Box
@@ -70,6 +71,7 @@ const SignIn = () => {
               autoComplete="email"
               type="email"
               autoFocus
+              sx={{background:"white"}}
             />
             <TextField
               margin="normal"
@@ -79,18 +81,20 @@ const SignIn = () => {
               label="Password"
               type="password"
               autoComplete="current-password"
+              sx={{background:"white"}}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              
             >
               Sign In
             </Button>
             <Grid item>
               <Link
-                style={{fontSize:"14px" }}
+                style={{fontSize:"14px",color:"white" }}
                 to={"/signup"}
               >
                 {"Don't have an account? Sign Up"}
@@ -102,7 +106,7 @@ const SignIn = () => {
           variant="body2"
           color="text.secondary"
           align="center"
-          sx={{ mt: 8 }}
+          sx={{ mt: 8,color:"white" }}
         >
           {"Copyright © "}
           Pace {new Date().getFullYear()}
@@ -110,6 +114,7 @@ const SignIn = () => {
         </Typography>
       </Container>
     </ThemeProvider>
+    </div>
   );
 };
 

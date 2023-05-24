@@ -1,0 +1,15 @@
+.data-grid-container .MuiDataGrid-footerContainer {
+  display: none;
+
+}
+.completeOrder_wrapper{
+    height: 43vh;
+    width: 100%;
+    margin-top: 2rem;
+    background-color: #141e2f;
+    color: #fff;
+    border-radius: 1rem;
+}
+.complete_text{
+    padding: 1rem 0 0 1rem;
+}

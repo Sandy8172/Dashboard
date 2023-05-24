@@ -2,14 +2,13 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import CollapsibleTable from "./CollapsibleTable";
-
+import { useDispatch } from "react-redux";
+import { dataSliceActions } from "../../../store/dataSlice";
 
 function MainTable() {
-
   const [data, setData] = useState([]);
   const [formetedData, setFormetedData] = useState([]);
-  const [sortedData, setSortedData] = useState([]);
-  const [MtMsum, setMtMsum] = useState(0);
+  const dispatch = useDispatch();
 
   const dataFechHandling = () => {
     axios
@@ -23,10 +22,11 @@ function MainTable() {
       })
       .catch((err) => console.log(err.message));
 
-    const addMtM = data.reduce((pre, curr) => {
+    const MtMsum = data.reduce((pre, curr) => {
       return pre + curr.MtM;
     }, 0);
-    setMtMsum(addMtM);
+    dispatch(dataSliceActions.MtMhandler(MtMsum))
+
 
     const objdata = data.map(
       ({
@@ -72,7 +72,7 @@ function MainTable() {
     setFormetedData(objdata);
 
     const sort = formetedData.sort((a, b) => a.Index_Num - b.Index_Num);
-    setSortedData(sort);
+    dispatch(dataSliceActions.rowsHandler(sort));
   };
   const headData = [
     "Index_Num",
@@ -93,14 +93,20 @@ function MainTable() {
     "UnRealized",
     "MtM",
   ];
+
   useEffect(() => {
     dataFechHandling();
   }, [data]);
+
+  useEffect(() => {
+    dispatch(dataSliceActions.headersHandler(headData));
+  }, []);
+
   return (
     <>
-    <CollapsibleTable column={headData} row={sortedData} />
+      <CollapsibleTable />
     </>
-  )
+  );
 }
 
-export default MainTable
+export default MainTable;

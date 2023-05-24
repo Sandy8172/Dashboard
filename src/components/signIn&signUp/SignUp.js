@@ -46,6 +46,7 @@ const SignUp = () => {
   };
 
   return (
+    <div style={{background:"#010819"}}>
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -60,16 +61,15 @@ const SignUp = () => {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{color:"white"}}>
             Sign up
           </Typography>
           <Box
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
-            <Grid container spacing={2}>
+            sx={{ mt: 3 }}          >
+            <Grid container spacing={2} >
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
@@ -80,6 +80,7 @@ const SignUp = () => {
                   autoFocus
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
+                  sx={{background:"white"}}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -91,6 +92,7 @@ const SignUp = () => {
                   autoComplete="family-name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
+                  sx={{background:"white"}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -103,6 +105,7 @@ const SignUp = () => {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  sx={{background:"white"}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -115,6 +118,7 @@ const SignUp = () => {
                   autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  sx={{background:"white"}}
                 />
               </Grid>
             </Grid>
@@ -128,7 +132,7 @@ const SignUp = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link style={{fontSize:"14px" }} to={"/"} >
+                <Link style={{fontSize:"14px",color:"white" }} to={"/"} >
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -139,7 +143,7 @@ const SignUp = () => {
           variant="body2"
           color="text.secondary"
           align="center"
-          sx={{ mt: 5 }}
+          sx={{ mt: 5,color:"white" }}
         >
          {"Copyright © "}
           Pace {new Date().getFullYear()}
@@ -147,6 +151,7 @@ const SignUp = () => {
         </Typography>
       </Container>
     </ThemeProvider>
+    </div>
   );
 };
 
