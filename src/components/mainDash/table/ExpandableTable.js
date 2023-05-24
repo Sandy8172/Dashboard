@@ -1,5 +1,5 @@
 import { CSVLink } from "react-csv";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Table,
   TableCell,
@@ -39,6 +39,20 @@ const ExpandableTable = React.memo((props) => {
   const rowData = useSelector((state) => state.data.rows);
   const headData = useSelector((state) => state.data.headers);
 
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "+") {
+        setOpenModal(true);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   const handleCheckboxChange = useCallback(
     (e) => {
       const Idx_Num = row.Index_Num;
@@ -76,7 +90,6 @@ const ExpandableTable = React.memo((props) => {
     setIsDropdownOpen((prevState) => !prevState);
   }, []);
 
-  // const csvData = [selectedRowData];
   const csvHeaders = headData.map((header) => ({ label: header, key: header }));
   const csvData = rowData.map((row) => ({
     ...row,
@@ -145,6 +158,32 @@ const ExpandableTable = React.memo((props) => {
               >
                 <TableHead>
                   <TableRow sx={{ borderBottom: "2px #7b7b7b solid" }}>
+                    <TableCell>
+                      {open && (
+                        <TableRow>
+                          <TableCell
+                            colSpan={8}
+                            align="center"
+                            sx={{ borderBottom: "none" }}
+                          >
+                            <CSVLink
+                              data={csvData}
+                              filename={"selected_row_data.csv"}
+                              target="_blank"
+                              className="export-button"
+                            >
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<GetAppIcon />}
+                              >
+                                Export
+                              </Button>
+                            </CSVLink>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableCell>
                     {headData.map((ele, ind) => (
                       <TableCell
                         sx={{ color: "white" }}
@@ -171,6 +210,7 @@ const ExpandableTable = React.memo((props) => {
                           onClick={() => handleRowClick(ele)}
                           style={{ cursor: "pointer" }}
                         >
+                          <TableCell></TableCell>
                           {headData.map((item, ind) => (
                             <TableCell
                               sx={{ color: "white" }}
@@ -256,27 +296,6 @@ const ExpandableTable = React.memo((props) => {
             </div>
           </div>
         </Modal>
-      )}
-
-      {open && (
-        <TableRow>
-          <TableCell colSpan={8} align="right">
-            <CSVLink
-              data={csvData}
-              filename={"selected_row_data.csv"}
-              target="_blank"
-              className="export-button"
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<GetAppIcon />}
-              >
-                Export Data
-              </Button>
-            </CSVLink>
-          </TableCell>
-        </TableRow>
       )}
     </React.Fragment>
   );

@@ -25,8 +25,7 @@ function MainTable() {
     const MtMsum = data.reduce((pre, curr) => {
       return pre + curr.MtM;
     }, 0);
-    dispatch(dataSliceActions.MtMhandler(MtMsum))
-
+    dispatch(dataSliceActions.MtMhandler(MtMsum));
 
     const objdata = data.map(
       ({

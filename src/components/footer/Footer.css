@@ -2,17 +2,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  position: sticky;
- 
+  position: stickey; 
   justify-content: center;
   width:100%;
   border-radius:10px;
-
   margin-top: 1rem;
-  
   background-color: #141e2f;
- 
- 
 }
 .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
   transform-origin: top right;
@@ -21,4 +16,9 @@
 .css-d9oaum-MuiSelect-select-MuiInputBase-input-MuiFilledInput-input {
   background-color: white !important;
   border-radius: 5px !important;
+}
+
+.css-llrb4p-MuiInputBase-root-MuiFilledInput-root-MuiSelect-root{
+  font-size:0.6rem !important;
+  padding: 0.2rem;
 }
