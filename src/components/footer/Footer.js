@@ -4,7 +4,6 @@ import {
   MenuItem,
   FormControl,
   Select,
-  Stack,
   Button,
 } from "@mui/material";
 import "./Footer.css";
@@ -68,14 +67,22 @@ const Footer = () => {
       order: order,
       option: option,
     };
-    axios
-      .post("http://172.16.1.24:5000/response", selectedData)
-      .then((ress) => {
-        console.log(ress);
-        dispatch(footerSliceActions.resetForm());
-      })
-      .catch((err) => console.log(err));
-    console.log(selectedData);
+    if (select === "" || Qty === "" || order === "" || option === "") {
+      alert("please fill all the fields");
+    } else if (select === "INSTRUMENT" && symbol === "") {
+      alert("please fill all the fields");
+    } else if (select === "STRATEGY" && indexValue.length === 0) {
+      alert("please check atleast one strategy");
+    } else {
+      axios
+        .post("http://172.16.1.24:5000/response", selectedData)
+        .then((ress) => {
+          console.log(ress);
+          dispatch(footerSliceActions.resetForm());
+          console.log(selectedData);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (
@@ -166,11 +173,9 @@ const Footer = () => {
           <MenuItem value={"CE , PE"}>BOTH</MenuItem>
         </Select>
       </FormControl>
-      <Stack spacing={2} direction="row">
-        <Button type="submit" variant="contained">
-          Submit
-        </Button>
-      </Stack>
+      <Button type="submit" variant="contained">
+        Submit
+      </Button>
     </form>
   );
 };

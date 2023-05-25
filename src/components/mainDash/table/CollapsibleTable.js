@@ -83,9 +83,9 @@ export default function CollapsibleTable(props) {
                   data={csvData}
                   filename={"table_data.csv"}
                   target="_blank"
-                  sx={{color:"white"}}
+                  sx={{ color: "white" }}
                 >
-                  <IconButton sx={{color:"white"}}>
+                  <IconButton sx={{ color: "white" }}>
                     <GetAppIcon />
                   </IconButton>
                 </CSVLink>

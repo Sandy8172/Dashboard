@@ -17,6 +17,9 @@ const dataSlice = createSlice({
       state.rows = action.payload;
     },
     MtMhandler(state, action) {
+      // state.MtM = action.payload;
+    },
+    PNLhandler(state, action) {
       state.MtM = action.payload;
     },
   },

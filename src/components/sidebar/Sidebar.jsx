@@ -1,6 +1,5 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import Cards from "../Cards/Cards";
 import { useState,useEffect } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -26,7 +25,6 @@ import NetOption from "../netOption/NetOption";
 import TradeBook from "../tradeBook/TradeBook";
 import OrderBook from "../orderBook/OrderBook";
 import MainDash from "../mainDash/MainDash";
-import Footer from "../footer/Footer";
 import "./Sidebar.css"
 
 

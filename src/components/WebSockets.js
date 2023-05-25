@@ -1,34 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { dataSliceActions } from "../store/dataSlice";
 
 function WebSockets() {
   const [data, setData] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {
     // Create a new WebSocket instance
-    const ws = new WebSocket(
-      "ws://103.168.211.34:3000/apimarketdata/socket.io/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJYMjAxXzM1ZDdlZDVhZTgwZjJhOWJkNjM2MzQiLCJwdWJsaWNLZXkiOiIzNWQ3ZWQ1YWU4MGYyYTliZDYzNjM0IiwiaWF0IjoxNjg0OTEwMDYxLCJleHAiOjE2ODQ5OTY0NjF9.Iakrd-J23iWX8eMGYNLC7Coe_QBsOKyWDrMD6uOyWoY&userID=X201&publishFormat=JSON&broadcastMode=Full&transport=websocket&EIO=3"
-    );
-
+    const ws = new WebSocket("ws://172.16.1.24:3500/");
     // WebSocket event handlers
     ws.onopen = () => {
       console.log("WebSocket connection established");
     };
 
     ws.onmessage = (event) => {
-      //   console.log("Received message:", event.data);
+      // console.log("Received message:", event.data);
       try {
         const keyValuePairs = event.data.match(/"([^"]+)":([^,"{}[\]]+)/g);
         const receivedData = {};
-        keyValuePairs.forEach((pair) => {
+        keyValuePairs?.forEach((pair) => {
           const [key, value] = pair.split(":");
           const cleanedKey = key.slice(1, -1).replace(/\\/g, "");
           receivedData[cleanedKey] = value;
-          // console.log(ReceivedData);
-          //   let transformedData = [];
-          //   let arrayData = transformedData.push(ReceivedData);
-          //   console.log(arrayData);
+          // console.log(receivedData);
         });
         setData([receivedData]);
-        
       } catch (error) {
         console.log(error);
       }
@@ -44,7 +40,7 @@ function WebSockets() {
     };
   }, []);
 
-    // console.log(data);
+  // console.log(data[0]?.[72749]);
 
   const sortedData = {};
 
@@ -58,11 +54,46 @@ function WebSockets() {
     sortedData[exchangeInstrumentId].push(item);
   });
 
-  const specificData = sortedData["73690"];
+  const specificData = sortedData[data[0]?.ExchangeInstrumentID];
   const lastTradedPrice = specificData ? specificData[0].LastTradedPrice : null;
-  console.log(lastTradedPrice);
+  // console.log(lastTradedPrice);
+  dispatch(dataSliceActions.PNLhandler(data[0]?.[72749]));
 
-  return <div>Last Traded Price: {lastTradedPrice}</div>;
+  return (
+    <div style={{ height: "50vh" }}>
+      Last Traded Price: {lastTradedPrice} <br />
+      {data[0]?.[72749]}
+    </div>
+  );
 }
 
 export default WebSockets;
+
+
+
+
+// useEffect(() => {
+//   const ws = new WebSocket("ws://103.168.211.34:3000/apimarketdata/socket.io/?token=YOUR_TOKEN");
+
+//   ws.onopen = () => {
+//     console.log("WebSocket connection established");
+//   };
+
+//   ws.onmessage = (event) => {
+//     try {
+//       const receivedData = JSON.parse(event.data.replace(/\//g, ""));
+//       setData([receivedData]);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   ws.onclose = () => {
+//     console.log("WebSocket connection closed");
+//   };
+
+//   return () => {
+//     ws.close();
+//   };
+// }, []);
+
