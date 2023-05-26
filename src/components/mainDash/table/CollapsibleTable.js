@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { CSVLink } from "react-csv";
 import GetAppIcon from "@mui/icons-material/GetApp";
 
-export default function CollapsibleTable(props) {
+export default function CollapsibleTable({tickerArray}) {
   const [data, setData] = useState(null);
   const [indicatorVisible, setIndicatorVisible] = useState(false);
 
@@ -77,7 +77,7 @@ export default function CollapsibleTable(props) {
       >
         <TableHead>
           <TableRow sx={{ color: "white", borderBottom: "2px solid #7b7b7b" }}>
-            <TableCell>
+            <TableCell align="lefft">
               <div className="export-button-container">
                 <CSVLink
                   data={csvData}
@@ -91,7 +91,7 @@ export default function CollapsibleTable(props) {
                 </CSVLink>
               </div>
             </TableCell>
-            <TableCell align="center">
+            <TableCell align="left">
               <div>
                 {!indicatorVisible && <div className="error"></div>}
                 {indicatorVisible && <div className="success"></div>}
@@ -119,7 +119,7 @@ export default function CollapsibleTable(props) {
         </TableHead>
         <TableBody>
           {rows.map((details, ind) => (
-            <ExpandableTable key={ind} row={details} />
+            <ExpandableTable key={ind} row={details} tickerArray={tickerArray} />
           ))}
         </TableBody>
       </Table>

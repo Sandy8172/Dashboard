@@ -8,6 +8,7 @@ import { dataSliceActions } from "../../../store/dataSlice";
 function MainTable() {
   const [data, setData] = useState([]);
   const [formetedData, setFormetedData] = useState([]);
+  const [tickerArray, setTickerArray] = useState([]);
   const dispatch = useDispatch();
 
   const dataFechHandling = () => {
@@ -69,6 +70,8 @@ function MainTable() {
       }
     );
     setFormetedData(objdata);
+    const tickerArr = [...new Set(formetedData.map((item) => item.Ticker))];
+    setTickerArray(tickerArr);
 
     const sort = formetedData.sort((a, b) => a.Index_Num - b.Index_Num);
     dispatch(dataSliceActions.rowsHandler(sort));
@@ -103,7 +106,7 @@ function MainTable() {
 
   return (
     <>
-      <CollapsibleTable />
+      <CollapsibleTable tickerArray={tickerArray} />
     </>
   );
 }
