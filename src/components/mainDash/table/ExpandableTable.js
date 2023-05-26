@@ -271,7 +271,7 @@ const ExpandableTable = React.memo((props) => {
                   style: { color: "white" },
                 }}
               />
-              {isDropdownOpen && (
+              {/* {isDropdownOpen && (
                 <div>
                   <MenuItem onClick={() => handleOptionClick("25%")}>
                     25%
@@ -283,7 +283,7 @@ const ExpandableTable = React.memo((props) => {
                     75%
                   </MenuItem>
                 </div>
-              )}
+              )} */}
 
               <Button
                 variant="contained"

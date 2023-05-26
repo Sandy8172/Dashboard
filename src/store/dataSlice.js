@@ -17,11 +17,11 @@ const dataSlice = createSlice({
       state.rows = action.payload;
     },
     MtMhandler(state, action) {
-      // state.MtM = action.payload;
+      state.MtM = action.payload.toFixed(2);
     },
-    PNLhandler(state, action) {
-      state.MtM = action.payload;
-    },
+    // PNLhandler(state, action) {
+    //   state.MtM = action.payload;
+    // },
   },
 });
 

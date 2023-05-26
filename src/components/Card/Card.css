@@ -5,7 +5,7 @@
   padding: 0.5rem;
   position: relative;
   cursor: pointer;
-  width: 16vw;
+  width: 18vw;
 }
 .CompactCard:hover {
   box-shadow: none !important;

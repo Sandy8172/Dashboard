@@ -93,8 +93,8 @@ export default function CollapsibleTable(props) {
             </TableCell>
             <TableCell align="center">
               <div>
-                {indicatorVisible && <div className="error"></div>}
-                {!indicatorVisible && <div className="success"></div>}
+                {!indicatorVisible && <div className="error"></div>}
+                {indicatorVisible && <div className="success"></div>}
               </div>
             </TableCell>
             <TableCell sx={{ color: "white" }} align="center">

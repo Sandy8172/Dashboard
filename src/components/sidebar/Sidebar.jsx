@@ -97,6 +97,8 @@ export default function Sidebar() {
       setOptionValue("Order Book")
     }else if(event.key === 'F8'){
       setOptionValue("Trade Book")
+    }else if(event.altKey && event.key=== 'F6'){
+      setOptionValue("Dashboard")
     }
   };
 
