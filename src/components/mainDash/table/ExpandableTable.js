@@ -1,7 +1,7 @@
 import { CSVLink } from "react-csv";
 import React, { useState, useCallback, useEffect } from "react";
-import { FormControl, Select, InputLabel } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
+import {FormControl,Select,InputLabel} from "@mui/material";
+import Autocomplete from '@mui/material/Autocomplete';
 import {
   Table,
   TableCell,
@@ -20,6 +20,7 @@ import {
 import {
   KeyboardArrowUp as KeyboardArrowUpIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
+  ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { footerSliceActions } from "../../../store/footerSlice";
@@ -30,11 +31,16 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 const ExpandableTable = React.memo((props) => {
   const { row } = props;
   const [open, setOpen] = useState(false);
+  
 
   const [inputValue, setInputValue] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [inputTicker, setInputTicker] = useState("");
+  const [optionType, setOptionType] = useState("");
+  const [modalHeading, setModalHeading] = useState("");
+  const [modalBackground, setModalBackground] = useState("");
+  const [inputTicker,setInputTicker] = useState("")
+  
 
   const selectedIndexes = useSelector((state) => state.footer.indexValue);
   const dispatch = useDispatch();
@@ -45,13 +51,26 @@ const ExpandableTable = React.memo((props) => {
       setInputTicker(selectedRowData.Ticker);
     }
   }, [selectedRowData]);
-  const handleTickerChange = (event, value) => {
-    setInputTicker(value);
+  
+  const handleTickerChange = (event,value) => {
+    const tickerValue = value || ''; 
+    setInputTicker(tickerValue);
+    setInputValue("");
+   
+  
+    
   };
-
+ 
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === "+") {
+        setModalHeading("Derivative Buy Order");
+        setModalBackground("#03254c");
+        setOpenModal(true);
+      }
+      else if (event.key === "-") {
+        setModalHeading("Derivative Sell Order");
+        setModalBackground("#7E2811");
         setOpenModal(true);
       }
     };
@@ -62,6 +81,9 @@ const ExpandableTable = React.memo((props) => {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
+  
+  
+  
 
   const handleCheckboxChange = useCallback(
     (e) => {
@@ -71,32 +93,39 @@ const ExpandableTable = React.memo((props) => {
       if (!selectedIndexes.includes(Idx_Num) && e.target.checked) {
         e.target.checked = false;
       }
+     
     },
     [dispatch, row.Index_Num, selectedIndexes]
   );
   const handleInput = (event) => {
     const newValue = parseInt(event.target.value) || 0;
-    const ticker = selectedRowData?.Ticker || "";
+    
+    const ticker = inputTicker;
+    console.log(ticker);
+    
     const step = ticker.includes("BANKNIFTY") ? 25 : 50;
     const min = 0;
-    console.log(step);
-
+ 
     if (event.nativeEvent.inputType === "increment") {
       setInputValue(newValue + step);
-      console.log(inputValue);
+      console.log(inputValue)
     } else if (event.nativeEvent.inputType === "decrement") {
       setInputValue(newValue - step >= min ? newValue - step : min);
     } else {
       setInputValue(newValue);
     }
   };
-
+  const handleOptionChange = (e)=>{
+    setOptionType(e.target.value);
+  }
+  
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     const number = parseInt(inputValue);
-
-    const ticker = selectedRowData?.Ticker || "";
-
+  
+    const ticker = inputTicker
+  
     if (ticker.includes("BANKNIFTY")) {
       if (number % 25 !== 0) {
         alert("Please enter a number that is a multiple of 25.");
@@ -108,19 +137,29 @@ const ExpandableTable = React.memo((props) => {
         return;
       }
     }
-
-    setInputValue("");
+    console.log(optionType);
+    console.log(inputTicker);
+    console.log(inputValue);
+    
+    setInputValue('');
     setOpenModal(false);
   };
+  
 
+  
+  
   const handleInputChange = (e) => {
     const newValue = e.target.value.trim();
-    const ticker = selectedRowData?.Ticker || "";
+    const ticker = inputTicker;
+   
     const step = ticker.includes("BANKNIFTY") ? 25 : 50;
-    if (newValue === "" || parseInt(newValue) % step === 0) {
+    if (newValue === '' || (parseInt(newValue) % step === 0)) {
       setInputValue(parseInt(newValue));
     }
+  
   };
+
+  
 
   const handleRowClick = useCallback((rowData) => {
     setSelectedRowData(rowData);
@@ -130,6 +169,8 @@ const ExpandableTable = React.memo((props) => {
   const handleCloseModal = useCallback(() => {
     setOpenModal(false);
   }, []);
+
+  
 
   const csvHeaders = headData.map((header) => ({ label: header, key: header }));
   const csvData = rowData.map((row) => ({
@@ -194,17 +235,11 @@ const ExpandableTable = React.memo((props) => {
             <Box sx={{ margin: 1 }}>
               <Table
                 size="small"
-                sx={{
-                  width: "100%",
-                  border: "2px #7b7b7b solid",
-                  height: "10px",
-                }}
+                sx={{ width: "100%", border: "2px #7b7b7b solid",height: "10px"  }}
                 aria-label="purchases"
               >
                 <TableHead>
-                  <TableRow
-                    sx={{ borderBottom: "2px #7b7b7b solid", height: "10px" }}
-                  >
+                  <TableRow sx={{ borderBottom: "2px #7b7b7b solid",height: "10px"  }}>
                     <TableCell>
                       {open && (
                         <TableRow>
@@ -252,7 +287,7 @@ const ExpandableTable = React.memo((props) => {
                           sx={{
                             color: "white",
                             borderBottom: "2px solid #7b7b7b",
-                            height: "10px",
+                            height: "10px" 
                           }}
                           key={ind}
                           onClick={() => handleRowClick(ele)}
@@ -288,108 +323,94 @@ const ExpandableTable = React.memo((props) => {
           onClose={handleCloseModal}
           aria-labelledby="custom-modal-title"
         >
-          <div className="modalContent">
+          <div className="modalContent"  style={{ backgroundColor: modalBackground }}>
+          <h2 className="popUp_heading">{modalHeading}</h2>
             {/* <div className="container"> */}
             <div className="container">
-              <h2 className="popUp_heading">Derivates Buy Order</h2>
+         
+            
+
               <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                value={inputTicker}
-                onChange={handleTickerChange}
-                options={props.tickerArray}
-                sx={{
-                  width: 290,
-                  color: "white",
-                  "& .MuiInputBase-root": {
-                    color: "white",
-                    backgroundColor: "white",
-                  },
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "white",
-                  },
+              disablePortal
+              id="combo-box-demo"
+              value={inputTicker}
+          
+              onChange={handleTickerChange}
+              options={props.tickerArray}
+              sx={{ width: 290,color:"white",'& .MuiInputBase-root': {
+                color: 'white', backgroundColor: 'white'}, '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {borderColor: 'white'}, }}
+                renderInput={(params) => <TextField  InputLabelProps={{
+                 style: {
+                  color: 'white'}, 
+              }} {...params} label="Ticker" />}
+    />
+              
+             
+              <FormControl variant="filled" sx={{ m:1, minWidth: 130, background: "transparent",borderRadius:"20px"}}>
+        <InputLabel id="demo-simple-select-filled-label">
+          Option Type
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={optionType}
+          onChange={handleOptionChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={"CE"}>CE</MenuItem>
+          <MenuItem value={"PE"}>PE</MenuItem>
+         
+        </Select>
+      </FormControl>
+            {/* </div> */}
+          
+
+
+           
+              <TextField
+                label="Qty"
+                type="number"
+                onInput={handleInput}
+                value={inputValue}
+                onChange={handleInputChange}
+                style={{ marginBottom:"12px",background:'white',borderRadius:"5px",padding:0 }}
+                className="textFieldStyle"
+                inputProps={{
+                  min: 0,
+                  step: inputTicker.includes("BANKNIFTY") ? 25 : 50,
                 }}
-                renderInput={(params) => (
-                  <TextField
-                    InputLabelProps={{
-                      style: {
-                        color: "white",
-                      },
-                    }}
-                    {...params}
-                    label="Ticker"
-                  />
-                )}
+                InputProps={{
+                  style: {
+                    borderColor: "white",
+                    color: "black",
+                    outlineColor: "white",
+                    padding:0,
+                  },
+                  inputMode: "numeric",
+                  onWheel: (event) => event.currentTarget.blur(),
+
+                }}
+                InputLabelProps={{
+                  style: { color: "black" },
+                }}
               />
+                <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              
+                className="buttonStyle"
+              >
+                Submit
+              </Button>
+              
+            
+                </div>
+                
 
-              <div className="wrapper">
-                <FormControl
-                  variant="filled"
-                  sx={{
-                    m: 1,
-                    minWidth: 130,
-                    background: "transparent",
-                    borderRadius: "20px",
-                  }}
-                >
-                  <InputLabel id="demo-simple-select-filled-label">
-                    Option Type
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-filled-label"
-                    id="demo-simple-select-filled"
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={"CE"}>CE</MenuItem>
-                    <MenuItem value={"PE"}>PE</MenuItem>
-                  </Select>
-                </FormControl>
-                <TextField
-                  label="Qty"
-                  type="number"
-                  onInput={handleInput}
-                  value={inputValue}
-                  onChange={handleInputChange}
-                  style={{
-                    marginBottom: "12px",
-                    background: "white",
-                    borderRadius: "5px",
-                    padding: 0,
-                  }}
-                  className="textFieldStyle"
-                  inputProps={{
-                    min: 0,
-                    step: selectedRowData?.Ticker.includes("BANKNIFTY")
-                      ? 25
-                      : 50,
-                  }}
-                  InputProps={{
-                    style: {
-                      borderColor: "white",
-                      color: "black",
-                      outlineColor: "white",
-                      padding: 0,
-                    },
-                    inputMode: "numeric",
-                    onWheel: (event) => event.currentTarget.blur(),
-                  }}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                />
-              </div>
-            </div>
-
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit}
-              className="buttonStyle"
-            >
-              Submit
-            </Button>
+             
           </div>
         </Modal>
       )}

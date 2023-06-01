@@ -77,7 +77,7 @@ export default function CollapsibleTable({tickerArray}) {
       >
         <TableHead>
           <TableRow sx={{ color: "white", borderBottom: "2px solid #7b7b7b" }}>
-            <TableCell align="lefft">
+            <TableCell align="left">
               <div className="export-button-container">
                 <CSVLink
                   data={csvData}

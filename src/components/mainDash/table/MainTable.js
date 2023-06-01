@@ -13,7 +13,7 @@ function MainTable() {
 
   const dataFechHandling = () => {
     axios
-      .get("http://172.16.1.24:5000/")
+      .get("http://172.16.1.24:8000/")
       .then((res) => {
         const transformedData = Object.entries(res.data).map(([id, value]) => ({
           id,
