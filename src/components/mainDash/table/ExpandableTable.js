@@ -1,7 +1,7 @@
 import { CSVLink } from "react-csv";
 import React, { useState, useCallback, useEffect } from "react";
-import {FormControl,Select,InputLabel} from "@mui/material";
-import Autocomplete from '@mui/material/Autocomplete';
+import { FormControl, Select, InputLabel } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
   Table,
   TableCell,
@@ -20,10 +20,10 @@ import {
 import {
   KeyboardArrowUp as KeyboardArrowUpIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
-  ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { footerSliceActions } from "../../../store/footerSlice";
+import axios from "axios";
 import "./ExpandableTable.css";
 
 import GetAppIcon from "@mui/icons-material/GetApp";
@@ -31,7 +31,6 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 const ExpandableTable = React.memo((props) => {
   const { row } = props;
   const [open, setOpen] = useState(false);
-  
 
   const [inputValue, setInputValue] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -39,8 +38,7 @@ const ExpandableTable = React.memo((props) => {
   const [optionType, setOptionType] = useState("");
   const [modalHeading, setModalHeading] = useState("");
   const [modalBackground, setModalBackground] = useState("");
-  const [inputTicker,setInputTicker] = useState("")
-  
+  const [inputTicker, setInputTicker] = useState("");
 
   const selectedIndexes = useSelector((state) => state.footer.indexValue);
   const dispatch = useDispatch();
@@ -51,24 +49,20 @@ const ExpandableTable = React.memo((props) => {
       setInputTicker(selectedRowData.Ticker);
     }
   }, [selectedRowData]);
-  
-  const handleTickerChange = (event,value) => {
-    const tickerValue = value || ''; 
+
+  const handleTickerChange = (event, value) => {
+    const tickerValue = value || "";
     setInputTicker(tickerValue);
     setInputValue("");
-   
-  
-    
   };
- 
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === "+") {
         setModalHeading("Derivative Buy Order");
         setModalBackground("#03254c");
         setOpenModal(true);
-      }
-      else if (event.key === "-") {
+      } else if (event.key === "-") {
         setModalHeading("Derivative Sell Order");
         setModalBackground("#7E2811");
         setOpenModal(true);
@@ -81,9 +75,6 @@ const ExpandableTable = React.memo((props) => {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
-  
-  
-  
 
   const handleCheckboxChange = useCallback(
     (e) => {
@@ -93,73 +84,71 @@ const ExpandableTable = React.memo((props) => {
       if (!selectedIndexes.includes(Idx_Num) && e.target.checked) {
         e.target.checked = false;
       }
-     
     },
     [dispatch, row.Index_Num, selectedIndexes]
   );
   const handleInput = (event) => {
     const newValue = parseInt(event.target.value) || 0;
-    
+
     const ticker = inputTicker;
-    console.log(ticker);
-    
+
     const step = ticker.includes("BANKNIFTY") ? 25 : 50;
     const min = 0;
- 
+
     if (event.nativeEvent.inputType === "increment") {
       setInputValue(newValue + step);
-      console.log(inputValue)
+      console.log(inputValue);
     } else if (event.nativeEvent.inputType === "decrement") {
       setInputValue(newValue - step >= min ? newValue - step : min);
     } else {
       setInputValue(newValue);
     }
   };
-  const handleOptionChange = (e)=>{
+  const handleOptionChange = (e) => {
     setOptionType(e.target.value);
-  }
-  
- 
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const modalValues = {
+      optionType,
+      inputTicker,
+      inputValue,
+    };
+
     const number = parseInt(inputValue);
-  
-    const ticker = inputTicker
-  
+
+    const ticker = inputTicker;
+
     if (ticker.includes("BANKNIFTY")) {
       if (number % 25 !== 0) {
         alert("Please enter a number that is a multiple of 25.");
         return;
       }
+    } else if (number % 50 !== 0) {
+      alert("Please enter a number that is a multiple of 50.");
+      return;
     } else {
-      if (number % 50 !== 0) {
-        alert("Please enter a number that is a multiple of 50.");
-        return;
-      }
+      axios
+        .post("http://172.16.1.24:5000/response", modalValues)
+        .then((ress) => {
+          console.log(ress);
+        })
+        .catch((err) => console.log(err));
+      setInputValue("");
+      setOpenModal(false);
     }
-    console.log(optionType);
-    console.log(inputTicker);
-    console.log(inputValue);
-    
-    setInputValue('');
-    setOpenModal(false);
   };
-  
 
-  
-  
   const handleInputChange = (e) => {
     const newValue = e.target.value.trim();
     const ticker = inputTicker;
-   
+
     const step = ticker.includes("BANKNIFTY") ? 25 : 50;
-    if (newValue === '' || (parseInt(newValue) % step === 0)) {
+    if (newValue === "" || parseInt(newValue) % step === 0) {
       setInputValue(parseInt(newValue));
     }
-  
   };
-
-  
 
   const handleRowClick = useCallback((rowData) => {
     setSelectedRowData(rowData);
@@ -170,20 +159,10 @@ const ExpandableTable = React.memo((props) => {
     setOpenModal(false);
   }, []);
 
-  
-
-  const csvHeaders = headData.map((header) => ({ label: header, key: header }));
   const csvData = rowData.map((row) => ({
     ...row,
     MtM: parseFloat(row.MtM), // Convert MtM value to a number if needed
   }));
-
-  const csvReport = {
-    filename: "table_data.csv",
-    headers: csvHeaders,
-    data: csvData,
-  };
-
   return (
     <React.Fragment>
       <TableRow sx={{ borderBottom: "2px solid #7b7b7b" }}>
@@ -235,14 +214,19 @@ const ExpandableTable = React.memo((props) => {
             <Box sx={{ margin: 1 }}>
               <Table
                 size="small"
-                sx={{ width: "100%", border: "2px #7b7b7b solid",height: "10px"  }}
+                sx={{
+                  width: "100%",
+                  border: "2px #7b7b7b solid",
+                  height: "10px",
+                }}
                 aria-label="purchases"
               >
                 <TableHead>
-                  <TableRow sx={{ borderBottom: "2px #7b7b7b solid",height: "10px"  }}>
+                  <TableRow
+                    sx={{ borderBottom: "2px #7b7b7b solid", height: "10px" }}
+                  >
                     <TableCell>
                       {open && (
-                        <TableRow>
                           <TableCell
                             colSpan={8}
                             align="center"
@@ -263,7 +247,6 @@ const ExpandableTable = React.memo((props) => {
                               </Button>
                             </CSVLink>
                           </TableCell>
-                        </TableRow>
                       )}
                     </TableCell>
                     {headData.map((ele, ind) => (
@@ -287,7 +270,7 @@ const ExpandableTable = React.memo((props) => {
                           sx={{
                             color: "white",
                             borderBottom: "2px solid #7b7b7b",
-                            height: "10px" 
+                            height: "10px",
                           }}
                           key={ind}
                           onClick={() => handleRowClick(ele)}
@@ -302,6 +285,7 @@ const ExpandableTable = React.memo((props) => {
                               key={ind}
                               align="center"
                             >
+                          
                               {ele.Index_Num === row.Index_Num && ele[item]}
                             </TableCell>
                           ))}
@@ -323,59 +307,79 @@ const ExpandableTable = React.memo((props) => {
           onClose={handleCloseModal}
           aria-labelledby="custom-modal-title"
         >
-          <div className="modalContent"  style={{ backgroundColor: modalBackground }}>
-          <h2 className="popUp_heading">{modalHeading}</h2>
+          <div
+            className="modalContent"
+            style={{ backgroundColor: modalBackground }}
+          >
+            <h2 className="popUp_heading">{modalHeading}</h2>
             {/* <div className="container"> */}
             <div className="container">
-         
-            
-
               <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              value={inputTicker}
-          
-              onChange={handleTickerChange}
-              options={props.tickerArray}
-              sx={{ width: 290,color:"white",'& .MuiInputBase-root': {
-                color: 'white', backgroundColor: 'white'}, '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {borderColor: 'white'}, }}
-                renderInput={(params) => <TextField  InputLabelProps={{
-                 style: {
-                  color: 'white'}, 
-              }} {...params} label="Ticker" />}
-    />
-              
-             
-              <FormControl variant="filled" sx={{ m:1, minWidth: 130, background: "transparent",borderRadius:"20px"}}>
-        <InputLabel id="demo-simple-select-filled-label">
-          Option Type
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-filled-label"
-          id="demo-simple-select-filled"
-          value={optionType}
-          onChange={handleOptionChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={"CE"}>CE</MenuItem>
-          <MenuItem value={"PE"}>PE</MenuItem>
-         
-        </Select>
-      </FormControl>
-            {/* </div> */}
-          
-
-
-           
+                disablePortal
+                id="combo-box-demo"
+                value={inputTicker}
+                onChange={handleTickerChange}
+                options={props.tickerArray}
+                sx={{
+                  width: 290,
+                  color: "white",
+                  "& .MuiInputBase-root": {
+                    color: "white",
+                    backgroundColor: "white",
+                  },
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "white",
+                  },
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    InputLabelProps={{
+                      style: {
+                        color: "white",
+                      },
+                    }}
+                    {...params}
+                    label="Ticker"
+                  />
+                )}
+              />
+              <FormControl
+                variant="filled"
+                sx={{
+                  m: 1,
+                  minWidth: 130,
+                  background: "transparent",
+                  borderRadius: "20px",
+                }}
+              >
+                <InputLabel id="demo-simple-select-filled-label">
+                  Option Type
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-filled-label"
+                  id="demo-simple-select-filled"
+                  value={optionType}
+                  onChange={handleOptionChange}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={"CE"}>CE</MenuItem>
+                  <MenuItem value={"PE"}>PE</MenuItem>
+                </Select>
+              </FormControl>
               <TextField
                 label="Qty"
                 type="number"
                 onInput={handleInput}
                 value={inputValue}
                 onChange={handleInputChange}
-                style={{ marginBottom:"12px",background:'white',borderRadius:"5px",padding:0 }}
+                style={{
+                  marginBottom: "12px",
+                  background: "white",
+                  borderRadius: "5px",
+                  padding: 0,
+                }}
                 className="textFieldStyle"
                 inputProps={{
                   min: 0,
@@ -386,31 +390,24 @@ const ExpandableTable = React.memo((props) => {
                     borderColor: "white",
                     color: "black",
                     outlineColor: "white",
-                    padding:0,
+                    padding: 0,
                   },
                   inputMode: "numeric",
                   onWheel: (event) => event.currentTarget.blur(),
-
                 }}
                 InputLabelProps={{
                   style: { color: "black" },
                 }}
               />
-                <Button
+              <Button
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
-              
                 className="buttonStyle"
               >
                 Submit
               </Button>
-              
-            
-                </div>
-                
-
-             
+            </div>
           </div>
         </Modal>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -16,7 +16,6 @@ import { CSVLink } from "react-csv";
 import GetAppIcon from "@mui/icons-material/GetApp";
 
 export default function CollapsibleTable({tickerArray}) {
-  const [data, setData] = useState(null);
   const [indicatorVisible, setIndicatorVisible] = useState(false);
 
   const row = useSelector((state) => state.data.rows);
