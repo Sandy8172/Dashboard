@@ -27,7 +27,7 @@
     "ws": "^8.13.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start --host 172.16.1.105",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

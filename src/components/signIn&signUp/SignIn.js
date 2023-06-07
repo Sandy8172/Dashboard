@@ -1,5 +1,5 @@
 import React from "react";
-import "./SignIn.css"
+import "./SignIn.css";
 import {
   Avatar,
   Button,
@@ -39,82 +39,81 @@ const SignIn = () => {
   };
 
   return (
-    <div style={{background:"#010819"}}>
-    <ThemeProvider theme={defaultTheme}   >
-      <Container component="main" maxWidth="xs" >
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 20,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5" sx={{color:"white"}}>
-            Sign in
-          </Typography>
+    <div style={{ background: "#010819" }}>
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 20,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              type="email"
-              autoFocus
-              sx={{background:"white"}}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              sx={{background:"white"}}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5" sx={{ color: "white" }}>
+              Sign in
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              Sign In
-            </Button>
-            <Grid item>
-              <Link
-                style={{fontSize:"14px",color:"white" }}
-                to={"/signup"}
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                type="email"
+                autoFocus
+                sx={{ background: "white" }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                sx={{ background: "white" }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
               >
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
+                Sign In
+              </Button>
+              <Grid item>
+                <Link
+                  style={{ fontSize: "14px", color: "white" }}
+                  to={"/signup"}
+                >
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Box>
           </Box>
-        </Box>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          align="center"
-          sx={{ mt: 8,color:"white" }}
-        >
-          {"Copyright © "}
-          Pace {new Date().getFullYear()}
-          {"."}
-        </Typography>
-      </Container>
-    </ThemeProvider>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            sx={{ mt: 8, color: "white" }}
+          >
+            {"Copyright © "}
+            Pace {new Date().getFullYear()}
+            {"."}
+          </Typography>
+        </Container>
+      </ThemeProvider>
     </div>
   );
 };

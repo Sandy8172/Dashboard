@@ -75,7 +75,7 @@ const Footer = () => {
       alert("please check atleast one strategy");
     } else {
       axios
-        .post("http://172.16.1.24:5000/response", selectedData)
+        .post("http://172.16.1.24:8000/response", selectedData)
         .then((ress) => {
           console.log(ress);
           dispatch(footerSliceActions.resetForm());

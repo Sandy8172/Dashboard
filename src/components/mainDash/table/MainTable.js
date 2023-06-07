@@ -7,7 +7,6 @@ import { dataSliceActions } from "../../../store/dataSlice";
 
 function MainTable() {
   const [data, setData] = useState([]);
-  const [formetedData, setFormetedData] = useState([]);
   const [tickerArray, setTickerArray] = useState([]);
   const dispatch = useDispatch();
 
@@ -22,13 +21,30 @@ function MainTable() {
         setData(transformedData);
       })
       .catch((err) => console.log(err.message));
+  };
+  useEffect(() => {
+    dataFechHandling();
+  }, [data]);
 
+  const dataFormation = () => {
     const MtMsum = data.reduce((pre, curr) => {
       return pre + curr.MtM;
     }, 0);
-    dispatch(dataSliceActions.MtMhandler(MtMsum));
-
-    const objdata = data.map(
+    const mergeRows = data.reduce((acc, obj) => {
+      const { Index_Num, ...rest } = obj;
+      if (!acc[Index_Num]) {
+        acc[Index_Num] = { Index_Num, ...rest };
+      } else {
+        Object.keys(rest).forEach((key) => {
+          if (typeof rest[key] === "number") {
+            acc[Index_Num][key] += rest[key];
+          }
+        });
+      }
+      return acc;
+    }, {});
+    const mergedRows = Object.values(mergeRows);
+    const formetedData = data.map(
       ({
         Buying_Avg_Price,
         Exchange_InstrumentID,
@@ -69,40 +85,15 @@ function MainTable() {
         };
       }
     );
-    setFormetedData(objdata);
+    const sort = formetedData.sort((a, b) => a.Index_Num - b.Index_Num);
+    dispatch(dataSliceActions.dataHandler({ MtMsum, mergedRows, sort }));
     const tickerArr = [...new Set(formetedData.map((item) => item.Ticker))];
     setTickerArray(tickerArr);
 
-    const sort = formetedData.sort((a, b) => a.Index_Num - b.Index_Num);
-    dispatch(dataSliceActions.rowsHandler(sort));
   };
-  const headData = [
-    "Index_Num",
-    "Selling_Avg_Price",
-    "Buying_Avg_Price",
-    "Option_Type",
-    "Net_Qty",
-    "Sell_Qty",
-    "Buy_Qty",
-    "Exchange_InstrumentID",
-    "Exchange_Segment",
-    "LTP",
-    "Stopl_Loss_Price",
-    "Strategy_Name",
-    "Strategy_Status",
-    "Ticker",
-    "Realized",
-    "UnRealized",
-    "MtM",
-  ];
-
   useEffect(() => {
-    dataFechHandling();
+    dataFormation();
   }, [data]);
-
-  useEffect(() => {
-    dispatch(dataSliceActions.headersHandler(headData));
-  }, []);
 
   return (
     <>

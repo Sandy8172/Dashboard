@@ -88,9 +88,9 @@
 
 @media screen and (max-width: 1200px) {
   .ExpandedCard {
-    top: 2rem;
+    top: 6rem;
     height: 45vh;
-    left: 6rem;
+    left: auto;
   }
   .CompactCard {
     width: 50vw;
@@ -102,7 +102,7 @@
   .ExpandedCard {
     top: 8rem;
     height: 50%;
-    left: 25px;
+    left: auto;
     width: 80%;
   }
   .CompactCard {

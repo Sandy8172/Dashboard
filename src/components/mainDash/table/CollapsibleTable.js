@@ -18,7 +18,7 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 export default function CollapsibleTable({tickerArray}) {
   const [indicatorVisible, setIndicatorVisible] = useState(false);
 
-  const row = useSelector((state) => state.data.rows);
+  const row = useSelector((state) => state.data.mergedRows);
 
   const createData = useCallback(
     (Index_Num, Strategy_Name, MtM, Net_Qty, Sell_Qty, Buy_Qty) => {
@@ -103,7 +103,7 @@ export default function CollapsibleTable({tickerArray}) {
               Strategy_Name
             </TableCell>
             <TableCell sx={{ color: "white" }} align="center">
-              PnL
+              MtM
             </TableCell>
             <TableCell sx={{ color: "white" }} align="center">
               Net_Qty
